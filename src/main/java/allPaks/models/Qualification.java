@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "qualifications")
-public class qualification {
+public class Qualification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -47,8 +47,8 @@ public class qualification {
     public void setSalary(int salary) {
         this.salary = salary;
     }
-    public qualification(){}
-    public qualification(int category, String name, int salary){
+    public Qualification(){}
+    public Qualification(int category, String name, int salary){
         this.category = category;
         this.name = name;
         this.salary = salary;
