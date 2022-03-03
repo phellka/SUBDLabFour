@@ -57,6 +57,6 @@ public class Collector {
     }
     @Override
     public String toString(){
-        return String.format("product [id = %d, name = %s, experience = %d, qualification_id = %d]", id, name, experience, qualification.getId());
+        return String.format("collector [id = %d, name = %s, experience = %d, qualification_id = %d]", id, name, experience, qualification.getId());
     }
 }

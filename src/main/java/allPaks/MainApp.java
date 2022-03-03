@@ -1,9 +1,11 @@
 package allPaks;
 
 import allPaks.models.Collector;
+import allPaks.models.Product;
 import allPaks.models.ProductType;
 import allPaks.models.Qualification;
 import allPaks.workLogics.CollectorLogic;
+import allPaks.workLogics.ProductLogic;
 import allPaks.workLogics.ProductTypeLogic;
 import allPaks.workLogics.QualificationLogic;
 import org.hibernate.SessionFactory;
@@ -15,7 +17,8 @@ public class MainApp {
     public static void main(String[] args){
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(Qualification.class)
                 .addAnnotatedClass(ProductType.class)
-                .addAnnotatedClass(Collector.class).buildSessionFactory();
+                .addAnnotatedClass(Collector.class)
+                .addAnnotatedClass(Product.class).buildSessionFactory();
         boolean isWork = true;
         while(isWork){
             System.out.println("vvedite 1 dlya raboty s qualifications");
@@ -36,7 +39,11 @@ public class MainApp {
                     productTypeLogic.work(sessionFactory);
                     break;
                 case 3:
-                    CollectorLogic productLogic = new CollectorLogic();
+                    CollectorLogic collectorLogic = new CollectorLogic();
+                    collectorLogic.work(sessionFactory);
+                    break;
+                case 4:
+                    ProductLogic productLogic = new ProductLogic();
                     productLogic.work(sessionFactory);
                     break;
                 case 6:
