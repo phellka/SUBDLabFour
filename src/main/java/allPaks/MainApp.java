@@ -1,13 +1,7 @@
 package allPaks;
 
-import allPaks.models.Collector;
-import allPaks.models.Product;
-import allPaks.models.ProductType;
-import allPaks.models.Qualification;
-import allPaks.workLogics.CollectorLogic;
-import allPaks.workLogics.ProductLogic;
-import allPaks.workLogics.ProductTypeLogic;
-import allPaks.workLogics.QualificationLogic;
+import allPaks.models.*;
+import allPaks.workLogics.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -18,7 +12,8 @@ public class MainApp {
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(Qualification.class)
                 .addAnnotatedClass(ProductType.class)
                 .addAnnotatedClass(Collector.class)
-                .addAnnotatedClass(Product.class).buildSessionFactory();
+                .addAnnotatedClass(Product.class)
+                .addAnnotatedClass(Assembling.class).buildSessionFactory();
         boolean isWork = true;
         while(isWork){
             System.out.println("vvedite 1 dlya raboty s qualifications");
@@ -45,6 +40,10 @@ public class MainApp {
                 case 4:
                     ProductLogic productLogic = new ProductLogic();
                     productLogic.work(sessionFactory);
+                    break;
+                case 5:
+                    AssemblingLogic assemblingLogic = new AssemblingLogic();
+                    assemblingLogic.work(sessionFactory);
                     break;
                 case 6:
                     isWork = false;
