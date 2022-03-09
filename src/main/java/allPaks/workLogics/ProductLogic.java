@@ -1,9 +1,6 @@
 package allPaks.workLogics;
 
-import allPaks.models.Collector;
-import allPaks.models.Product;
-import allPaks.models.ProductType;
-import allPaks.models.Qualification;
+import allPaks.models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -16,6 +13,7 @@ public class ProductLogic {
         System.out.println("vvedite 2 dlya chtenya product");
         System.out.println("vvedite 3 dlya redactirovanya product");
         System.out.println("vvedite 4 dlya udalenya product");
+        System.out.println("vvedite 4 dlya filtra");
         Scanner scanner = new Scanner(System.in);
         int i = scanner.nextInt();
         Session session = null;
@@ -33,6 +31,9 @@ public class ProductLogic {
                 break;
             case 4:
                 delete(session);
+                break;
+            case 5:
+                filterRead(session);
                 break;
         }
         session.getTransaction().commit();
@@ -68,11 +69,47 @@ public class ProductLogic {
         product.setProductType(session.get(ProductType.class, producttype_id));
         session.save(product);
     }
+    private void filterRead(Session session){
+        System.out.println("vvedite 1 dlya filtra po name");
+        System.out.println("vvedite 2 dlya filtra po price");
+        System.out.println("vvedite 3 dlya filtra po producttype_id");
+        Scanner scanner = new Scanner(System.in);
+        int i = scanner.nextInt();
+        List<Product> products = null;
+        switch(i){
+            case 1:
+                System.out.println("vvedite name");
+                String name = scanner.next();
+                products = session.createQuery("SELECT p from Product p where name = \'" + name + "\'", Product.class).getResultList();
+                break;
+            case 2:
+                System.out.println("vvedite experience");
+                int price = scanner.nextInt();
+                products = session.createQuery("SELECT p from Product p where price = " + price , Product.class).getResultList();
+                break;
+            case 3:
+                System.out.println("vvedite qualification_id");
+                int producttype_id = scanner.nextInt();
+                products = session.createQuery("SELECT p from Product p where producttype_id = " + producttype_id, Product.class).getResultList();
+                break;
+        }
+        System.out.println(products);
+    }
     private void delete(Session session){
         Scanner scanner = new Scanner(System.in);
         System.out.println("vvedite id");
         int id = scanner.nextInt();
         Product product = session.get(Product.class, id);
-        session.remove(product);
+        AssemblingLogic assemblingLogic = new AssemblingLogic();
+        assemblingLogic.delete(session, product);
+        session.delete(product);
+    }
+    public void delete(Session session, ProductType productType){
+        AssemblingLogic assemblingLogic = new AssemblingLogic();
+        List<Product> products = session.createQuery("SELECT p from Product p where producttype_id = " + productType.getId(), Product.class).getResultList();
+        for (int i = 0; i < products.size(); ++i){
+            assemblingLogic.delete(session, products.get(i));
+            session.delete(products.get(i));
+        }
     }
 }

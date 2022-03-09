@@ -9,7 +9,8 @@ import java.util.Scanner;
 
 public class MainApp {
     public static void main(String[] args){
-        SessionFactory sessionFactory = new Configuration().addAnnotatedClass(Qualification.class)
+        SessionFactory sessionFactory = new Configuration()
+                .addAnnotatedClass(Qualification.class)
                 .addAnnotatedClass(ProductType.class)
                 .addAnnotatedClass(Collector.class)
                 .addAnnotatedClass(Product.class)

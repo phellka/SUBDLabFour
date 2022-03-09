@@ -1,5 +1,6 @@
 package allPaks.workLogics;
 
+import allPaks.models.Assembling;
 import allPaks.models.Collector;
 import allPaks.models.Qualification;
 import org.hibernate.Session;
@@ -14,6 +15,7 @@ public class CollectorLogic {
         System.out.println("vvedite 2 dlya chtenya collector");
         System.out.println("vvedite 3 dlya redactirovanya collector");
         System.out.println("vvedite 4 dlya udalenya collector");
+        System.out.println("vvedite 5 dlya filtra");
         Scanner scanner = new Scanner(System.in);
         int i = scanner.nextInt();
         Session session = null;
@@ -31,6 +33,9 @@ public class CollectorLogic {
                 break;
             case 4:
                 delete(session);
+                break;
+            case 5:
+                filterRead(session);
                 break;
         }
         session.getTransaction().commit();
@@ -66,11 +71,47 @@ public class CollectorLogic {
         collector.setQualification(session.get(Qualification.class, qualification_id));
         session.save(collector);
     }
+    private void filterRead(Session session){
+        System.out.println("vvedite 1 dlya filtra po name");
+        System.out.println("vvedite 2 dlya filtra po experience");
+        System.out.println("vvedite 3 dlya filtra po qualification_id");
+        Scanner scanner = new Scanner(System.in);
+        int i = scanner.nextInt();
+        List<Collector> collectors = null;
+        switch(i){
+            case 1:
+                System.out.println("vvedite name");
+                String name = scanner.next();
+                collectors = session.createQuery("SELECT c from Collector c where name = \'" + name + "\'", Collector.class).getResultList();
+                break;
+            case 2:
+                System.out.println("vvedite experience");
+                int experience = scanner.nextInt();
+                collectors = session.createQuery("SELECT c from Collector c  where experience = " + experience, Collector.class).getResultList();
+                break;
+            case 3:
+                System.out.println("vvedite qualification_id");
+                int qualification_id = scanner.nextInt();
+                collectors = session.createQuery("SELECT c from Collector c  where qualification_id = " + qualification_id, Collector.class).getResultList();
+                break;
+        }
+        System.out.println(collectors);
+    }
     private void delete(Session session){
         Scanner scanner = new Scanner(System.in);
         System.out.println("vvedite id");
         int id = scanner.nextInt();
         Collector collector = session.get(Collector.class, id);
-        session.remove(collector);
+        AssemblingLogic assemblingLogic = new AssemblingLogic();
+        assemblingLogic.delete(session, collector);
+        session.delete(collector);
+    }
+    public void delete(Session session, Qualification qualification){
+        AssemblingLogic assemblingLogic = new AssemblingLogic();
+        List<Collector> collectors = session.createQuery("SELECT c from Collector c where qualification_id = " + qualification.getId(), Collector.class).getResultList();
+        for(int i = 0; i < collectors.size(); ++i){
+            assemblingLogic.delete(session, collectors.get(i));
+            session.delete(collectors.get(i));
+        }
     }
 }
