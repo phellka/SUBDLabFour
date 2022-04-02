@@ -3,7 +3,7 @@ package allPaks.workLogics;
 import allPaks.models.Assembling;
 import allPaks.models.Collector;
 import allPaks.models.Qualification;
-import org.hibernate.Session;
+    import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;

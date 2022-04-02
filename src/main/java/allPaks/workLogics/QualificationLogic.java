@@ -36,6 +36,9 @@ public class QualificationLogic {
             case 5:
                 filterRead(session);
                 break;
+            case 6:
+                create1000(session);
+                break;
         }
         session.getTransaction().commit();
     }
@@ -50,9 +53,17 @@ public class QualificationLogic {
         Qualification qualification = new Qualification(category, name, salary);
         session.save(qualification);
     }
+    private  void create1000(Session session){
+        Qualification qualification = new Qualification(1337, "TestCategory", 1337);
+        session.save(qualification);
+    }
     private void read(Session session){
+        long start = System.nanoTime();
         List<Qualification> qualifications = session.createQuery("SELECT q from Qualification q", Qualification.class).getResultList();
+        long finish = System.nanoTime();
+        long elapsed = finish - start;
         System.out.println(qualifications);
+        System.out.println("Прошло времени, мс: " + elapsed / 1000000);
     }
     private void filterRead(Session session){
         System.out.println("vvedite 1 dlya filtra po category");
@@ -65,7 +76,11 @@ public class QualificationLogic {
             case 1:
                 System.out.println("vvedite category");
                 String category = scanner.next();
+                long start = System.nanoTime();
                 qualifications = session.createQuery("SELECT q from Qualification q where category = \'" + category + "\'", Qualification.class).getResultList();
+                long finish = System.nanoTime();
+                long elapsed = finish - start;
+                System.out.println("Прошло времени, мс: " + elapsed / 1000000);
                 break;
             case 2:
                 System.out.println("vvedite name");
